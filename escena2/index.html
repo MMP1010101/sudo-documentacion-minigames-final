@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini-Juegos Automáticos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- La hoja de estilos del video se cargará dinámicamente desde JavaScript -->
+    <style>
+        /* Estilo para mensajes de error */
+        .game-error {
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            max-width: 80%;
+            text-align: center;
+        }
+        
+        /* Estilo para la carga del video */
+        .video-loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 100;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Reproductor de música que continuará durante las transiciones -->
+    <audio id="background-music" loop>
+        <source src="musica/start.mp3" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    
+    <!-- Contenedor principal donde se mostrarán los juegos -->
+    <div id="game-container"></div>
+    
+    <!-- Indicador de tiempo para la transición -->
+    <div id="timer">Siguiente juego en: <span id="countdown">30</span>s</div>
+    
+    <!-- Controles generales -->
+    <div id="controls">
+        <button id="music-toggle">Música: ON</button>
+        <button id="skip-game">Saltar juego</button>
+    </div>
+    
+    <!-- Contenedor para mensajes de consola/error -->
+    <div id="debug-output" style="display: none; position: fixed; bottom: 60px; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #0f0; padding: 10px; max-height: 150px; overflow: auto; font-family: monospace;"></div>
+    
+    <script>
+        // Interceptar console.log y console.error para depuración
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+            const debugOutput = document.getElementById('debug-output');
+            debugOutput.style.display = 'block';
+            
+            const originalConsoleLog = console.log;
+            const originalConsoleError = console.error;
+            
+            console.log = function() {
+                originalConsoleLog.apply(console, arguments);
+                const message = Array.from(arguments).join(' ');
+                debugOutput.innerHTML += `<div>[LOG] ${message}</div>`;
+                debugOutput.scrollTop = debugOutput.scrollHeight;
+            };
+            
+            console.error = function() {
+                originalConsoleError.apply(console, arguments);
+                const message = Array.from(arguments).join(' ');
+                debugOutput.innerHTML += `<div style="color:red">[ERROR] ${message}</div>`;
+                debugOutput.scrollTop = debugOutput.scrollHeight;
+            };
+        }
+    </script>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>

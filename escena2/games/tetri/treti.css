@@ -1,0 +1,259 @@
+/* Estilos generales del juego */
+.tetris-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Contenedor izquierdo para información y siguiente pieza */
+.tetris-left-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 150px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    border: 2px solid #3498db;
+    box-shadow: 0 0 10px #3498db;
+}
+
+/* Estilo para puntajes y nivel */
+.tetris-score-display, .tetris-level-display {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.tetris-score-display h2, .tetris-level-display h2, .tetris-next-piece h2 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #3498db;
+    text-shadow: 0 0 5px rgba(52, 152, 219, 0.7);
+}
+
+#tetris-score, #tetris-level {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Sección de siguiente pieza */
+.tetris-next-piece {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tetris-next-piece canvas {
+    background-color: #000;
+    border: 1px solid #3498db;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #3498db;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Tablero principal */
+#tetris-board {
+    border: 3px solid #3498db;
+    box-shadow: 0 0 15px #3498db;
+    border-radius: 5px;
+    background-color: #000;
+}
+
+/* Botón de modo emoji */
+.tetris-emoji-toggle {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.tetris-emoji-toggle:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Mensaje de línea completada */
+.tetris-line-message {
+    position: absolute;
+    color: #ffff00;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+    animation: lineMessage 1s ease-out forwards;
+    z-index: 100;
+    transform: translateX(-50%);
+}
+
+@keyframes lineMessage {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-50px); }
+}
+
+/* Efecto de Tetris (4 líneas) */
+.tetris-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ff00ff;
+    font-size: 48px;
+    font-weight: bold;
+    text-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+    animation: tetrisEffect 1.5s ease-out;
+    z-index: 1000;
+}
+
+@keyframes tetrisEffect {
+    0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+/* Efecto de subir de nivel */
+.tetris-level-effect {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #00ff00;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+    animation: levelEffect 2s ease-out;
+    z-index: 1000;
+}
+
+@keyframes levelEffect {
+    0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+    80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+}
+
+/* Controles táctiles para móviles */
+.tetris-touch-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tetris-touch-controls button {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+}
+
+.tetris-touch-controls button:hover {
+    background-color: #2980b9;
+}
+
+.tetris-touch-controls button:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Pantalla de Game Over */
+.tetris-gameover {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 20px #ff0000;
+    text-align: center;
+    z-index: 1000;
+    min-width: 300px;
+}
+
+.tetris-gameover h1 {
+    color: #ff0000;
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    animation: pulse 2s infinite;
+}
+
+.tetris-gameover p {
+    font-size: 20px;
+    margin: 10px 0;
+    color: #ffffff;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+/* Ajustes responsivos */
+@media (max-width: 600px) {
+    .tetris-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .tetris-left-container {
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .tetris-score-display, .tetris-level-display {
+        width: 45%;
+    }
+    
+    .tetris-next-piece {
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .tetris-emoji-toggle {
+        width: 100%;
+    }
+    
+    #tetris-board {
+        width: 240px;
+        height: 360px;
+    }
+}

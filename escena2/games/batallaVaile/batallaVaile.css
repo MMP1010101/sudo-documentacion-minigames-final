@@ -1,0 +1,812 @@
+/* Variables CSS para ajuste dinámico de rendimiento */
+:root {
+    --wave-size: 100px;
+    --effect-opacity: 1;
+    --primary-boss-color: #ff0055;
+    --secondary-boss-color: #00ddff;
+    --highlight-color: #ffcc00;
+    --video-width: 100%; /* Cambio a pantalla completa */
+    --video-height: 100%; /* Cambio a pantalla completa */
+}
+
+/* Import Google Fonts para mejor estética */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;600;900&display=swap');
+
+/* Contenedor principal del juego */
+#batallaVaile-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #000;
+    overflow: hidden;
+    font-family: 'Exo 2', sans-serif;
+    transition: all 0.3s ease;
+}
+
+/* Efecto de daño cuando fallas o expira una tecla */
+.damage-effect {
+    animation: damage-flash 0.3s ease;
+}
+
+@keyframes damage-flash {
+    0%, 100% { filter: none; }
+    50% { filter: grayscale(0.5) brightness(1.5) contrast(1.5); }
+}
+
+/* Contenedor del video a pantalla completa */
+#video-container {
+    position: fixed; /* Cambiado a fixed para cubrir toda la ventana */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    background-color: #000; /* Fondo negro para contrastar con el verde */
+}
+
+/* Contenedor de partículas para efectos visuales */
+#particle-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Estilo para partículas individuales */
+.particle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: float 10s linear infinite;
+}
+
+/* Pantalla de introducción de boss */
+#boss-intro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+#boss-intro.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Título del boss */
+.boss-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--primary-boss-color);
+    text-shadow: 
+        0 0 10px rgba(255, 0, 85, 0.7),
+        0 0 20px rgba(255, 0, 85, 0.5),
+        0 0 30px rgba(255, 0, 85, 0.3);
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    text-align: center;
+}
+
+/* Subtítulo del boss */
+.boss-subtitle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--secondary-boss-color);
+    text-shadow: 0 0 15px rgba(0, 221, 255, 0.7);
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+/* Botón épico para iniciar la batalla */
+.epic-button {
+    position: relative;
+    padding: 15px 40px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(45deg, var(--primary-boss-color), var(--secondary-boss-color));
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 
+        0 0 10px rgba(255, 0, 85, 0.7),
+        0 0 20px rgba(0, 221, 255, 0.5);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.epic-button:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        0 0 15px rgba(255, 0, 85, 0.9),
+        0 0 30px rgba(0, 221, 255, 0.7);
+}
+
+.epic-button:active {
+    transform: scale(0.98);
+}
+
+/* Efecto del botón */
+.button-effect {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent
+    );
+    animation: button-shine 3s infinite;
+    z-index: -1;
+}
+
+/* Barra de progreso del boss */
+#boss-meter-container {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 600px;
+    z-index: 50;
+    text-align: center;
+}
+
+#boss-meter-label {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--highlight-color);
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.7);
+}
+
+#boss-meter-bar-container {
+    width: 100%;
+    height: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#boss-meter-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #ff5252;
+    border-radius: 8px;
+    transition: width 0.3s ease-out, background-color 0.5s ease;
+}
+
+/* Estilo para tecla expirada */
+.key-expired {
+    animation: key-expired 0.5s forwards;
+}
+
+@keyframes key-expired {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+        background-color: rgba(231, 76, 60, 0.8);
+    }
+}
+
+/* Mensaje de victoria */
+#victory-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--highlight-color);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    color: white;
+    z-index: 200;
+    box-shadow: 
+        0 0 20px rgba(255, 204, 0, 0.5),
+        0 0 40px rgba(0, 0, 0, 0.6);
+    min-width: 300px;
+}
+
+.victory-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--highlight-color);
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+    margin-bottom: 20px;
+}
+
+.victory-score, .victory-time, .victory-combo {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+.victory-score {
+    color: #4caf50;
+}
+
+.victory-combo {
+    color: #ff9f43;
+}
+
+/* Estilo del reproductor de video - técnica específica para eliminar el color clave */
+#dance-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    
+    /* Técnica simple pero efectiva para eliminar el verde del croma */
+    mix-blend-mode: screen;
+    background-color: #000;
+    filter: brightness(1.2) contrast(1.2) saturate(1.2);
+}
+
+/* Fondo detrás del video para que el croma eliminado sea negro */
+#video-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 0;
+}
+
+/* Capa de efectos para aportar color al video */
+#overlay-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    
+    /* Viñeta para mejorar el aspecto visual */
+    background: radial-gradient(
+        circle at center,
+        transparent 30%,
+        rgba(0, 0, 0, 0.3) 70%,
+        rgba(0, 0, 0, 0.6) 100%
+    );
+}
+
+/* Contenedor para las indicaciones de teclas y puntuación */
+#key-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none; /* Permite que los clics pasen a través */
+}
+
+/* Contenedor de teclas activas */
+#active-keys-container {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 80px);
+    pointer-events: none;
+}
+
+/* Contenedor para puntuación y combo - ajustado para mejor visibilidad */
+#score-container {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    z-index: 30;
+}
+
+/* Estilo para cada tecla - con sombra mejorada para visibilidad sobre video */
+.key-prompt {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+    z-index: 20;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(255, 165, 0, 0.7) 100%);
+    box-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 0 20px rgba(255, 165, 0, 0.5),
+        0 0 30px rgba(0, 0, 0, 0.5); /* Sombra extra para destacar sobre el video */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center;
+    overflow: visible;
+}
+
+.key-prompt::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    animation: pulseRing 2s infinite;
+    z-index: -1;
+}
+
+.key-prompt span {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Estilo para el marcador de puntuación */
+#score-display {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Estilo para el indicador de combo */
+#combo-display {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Contenedor para mensajes de feedback */
+#hit-feedback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 40;
+}
+
+/* Estilos para diferentes niveles de combo */
+.super-combo {
+    color: #ffdd59;
+    box-shadow: 0 0 15px rgba(255, 221, 89, 0.7);
+}
+
+.ultra-combo {
+    color: #ff9f43;
+    box-shadow: 0 0 20px rgba(255, 159, 67, 0.8);
+    font-size: 20px !important;
+}
+
+.mega-combo {
+    color: #ff6b6b;
+    box-shadow: 0 0 25px rgba(255, 107, 107, 0.9);
+    font-size: 22px !important;
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+    animation: pulseCombo 1s infinite;
+}
+
+/* Animación para el combo especial */
+.combo-highlight {
+    transform: scale(1.5);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Estilo para teclas correctas - corregido el cierre */
+.key-correct {
+    background: radial-gradient(circle, rgba(46, 213, 115, 0.9) 0%, rgba(39, 174, 96, 0.8) 100%);
+    box-shadow: 
+        0 0 20px rgba(46, 213, 115, 0.8),
+        0 0 40px rgba(39, 174, 96, 0.5);
+    transform: scale(1.5);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+/* Clase para mensaje de error */
+.error {
+    background-color: rgba(231, 76, 60, 0.8);
+    color: white;
+    font-size: 20px;
+    width: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 100;
+}
+
+/* Elementos visuales de efectos cuando se presiona una tecla */
+.key-hit-effect {
+    position: fixed;
+    pointer-events: none;
+    z-index: 15;
+    transform: translate(-50%, -50%);
+}
+
+.hit-wave {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid #fff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    animation: expandWave 1s forwards;
+}
+
+.hit-key-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    opacity: 1;
+    animation: floatUp 1.5s forwards;
+}
+
+/* Feedback visual de aciertos y errores */
+.hit-feedback {
+    position: absolute;
+    font-size: 20px;
+    font-weight: bold;
+    color: #2ecc71;
+    text-shadow: 0 0 10px rgba(46, 204, 113, 0.6);
+    transform: translate(-50%, -100%);
+    animation: floatFeedback 0.8s ease-out;
+    pointer-events: none;
+    z-index: 45;
+}
+
+.error-feedback {
+    color: #e74c3c;
+    text-shadow: 0 0 10px rgba(231, 76, 60, 0.6);
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+/* Estilos para los botones de control de video */
+.game-button {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.game-button:hover {
+    background: rgba(50, 50, 50, 0.9);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.game-button:active {
+    transform: scale(0.95);
+}
+
+#upload-controls {
+    display: flex;
+    flex-direction: row;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+#upload-controls:hover {
+    opacity: 1;
+}
+
+/* Mejoras para la eliminación de croma según el tipo de video */
+#dance-video.custom-video {
+    background-color: #111;  /* Fondo oscuro para video personalizado */
+    mix-blend-mode: screen;
+}
+
+/* Animaciones */
+@keyframes pulseRing {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+}
+
+@keyframes pulseCombo {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes expandWave {
+    0% {
+        width: 10px;
+        height: 10px;
+        opacity: var(--effect-opacity);
+    }
+    100% {
+        width: var(--wave-size);
+        height: var(--wave-size);
+        opacity: 0;
+    }
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -150%);
+    }
+}
+
+@keyframes floatFeedback {
+    0% {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+    20% {
+        transform: translate(-50%, -120%);
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -180%);
+        opacity: 0;
+    }
+}
+
+@keyframes keyAppear {
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.2) rotate(10deg);
+    }
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+@keyframes keyVanish {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* Animaciones adicionales */
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: var(--effect-opacity);
+    }
+    100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes button-shine {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+}
+
+/* Modo responsivo */
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+    .key-prompt {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .key-prompt span {
+        font-size: 18px;
+    }
+    
+    #score-display, #combo-display {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    /* Reducir animaciones en dispositivos móviles o cuando el usuario prefiere menos movimiento */
+    .hit-wave {
+        animation-duration: 0.5s;
+    }
+    
+    .key-prompt::before {
+        animation: none;
+    }
+    
+    .mega-combo {
+        animation: none;
+    }
+}
+
+/* Responsive para diferentes tamaños de pantalla */
+@media (max-width: 768px) {
+    .boss-title {
+        font-size: 2.5rem;
+    }
+    
+    .boss-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .epic-button {
+        font-size: 1.2rem;
+        padding: 12px 30px;
+    }
+    
+    #boss-meter-container {
+        width: 90%;
+    }
+    
+    #victory-message {
+        width: 90%;
+        padding: 20px;
+    }
+    
+    .victory-title {
+        font-size: 2rem;
+    }
+}
+
+/* Indicador de tiempo restante */
+#time-remaining {
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    font-size: 16px;
+    margin-top: 8px;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Advertencia cuando queda poco tiempo */
+.time-warning {
+    color: #ff5252 !important;
+    animation: timeWarning 1s infinite alternate;
+    font-weight: bold;
+}
+
+@keyframes timeWarning {
+    from { text-shadow: 0 0 5px rgba(255, 82, 82, 0.5); }
+    to { text-shadow: 0 0 15px rgba(255, 82, 82, 0.9); }
+}
+
+/* Mensaje cuando se acaba el tiempo */
+#timeout-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #ff5252;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    color: white;
+    z-index: 200;
+    box-shadow: 
+        0 0 20px rgba(255, 82, 82, 0.5),
+        0 0 40px rgba(0, 0, 0, 0.6);
+    min-width: 300px;
+}
+
+.timeout-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #ff5252;
+    text-shadow: 0 0 10px rgba(255, 82, 82, 0.7);
+    margin-bottom: 20px;
+}
+
+.timeout-score, .timeout-combo {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+/* Feedback para cambio de patrón */
+.highlight-feedback {
+    color: #f1c40f !important;
+    font-size: 24px !important;
+    text-shadow: 0 0 15px rgba(241, 196, 15, 0.8) !important;
+    font-weight: bold;
+    letter-spacing: 2px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 16px;
+    border-radius: 10px;
+}
